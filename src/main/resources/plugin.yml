@@ -1,0 +1,14 @@
+name: Walkthrough
+
+author: Toto Castaldi
+website: https://github.com/toto-castaldi/bukkit-minecraft-walkthrough-construction
+main: com.github.totoCastaldi.minecraft.bukkit.plugin.walkthrough.Plugin
+
+commands:
+    step:
+        description: Run a step
+        usage: /step [STEP NUMBER]
+    answer:
+        description: Run an answer
+        usage: /answer [STEP NUMBER]
+version: 0.1
