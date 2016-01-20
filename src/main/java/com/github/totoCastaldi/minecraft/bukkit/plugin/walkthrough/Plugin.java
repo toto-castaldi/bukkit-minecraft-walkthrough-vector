@@ -23,7 +23,7 @@ import java.util.*;
 
 public class Plugin extends JavaPlugin {
 
-    private Map<Player, Boolean> tntLaunch = new HashMap<Player, Boolean>();
+    private Map<Player, String> launch = new HashMap<Player, String>();
 
     public boolean onCommand(
             CommandSender sender,
@@ -41,14 +41,24 @@ public class Plugin extends JavaPlugin {
 
         if (StringUtils.equalsIgnoreCase("step", commandLabel)) {
 
-            if ("1".equalsIgnoreCase(firstParameter)) step1(me, StringUtils.equalsIgnoreCase("start", secondParameter));
+            if ("1".equalsIgnoreCase(firstParameter)) step(me, "s1", StringUtils.equalsIgnoreCase("start", secondParameter));
+            if ("2".equalsIgnoreCase(firstParameter)) step(me, "s2", StringUtils.equalsIgnoreCase("start", secondParameter));
+        }
+
+        if (StringUtils.equalsIgnoreCase("answer", commandLabel)) {
+
+            if ("1".equalsIgnoreCase(firstParameter)) step(me, "a1", StringUtils.equalsIgnoreCase("start", secondParameter));
         }
 
         return true;
     }
 
-    private void step1(Player player, Boolean start) {
-        tntLaunch.put(player, start);
+    private void step(Player player, String name, Boolean start) {
+        if (start) {
+            launch.put(player, name);
+        } else {
+            launch.remove(player);
+        }
     }
 
     public class PlayerEventListener implements Listener {
@@ -59,23 +69,39 @@ public class Plugin extends JavaPlugin {
         }
 
         @EventHandler
-        public void onPlayerJoinEvent(PlayerJoinEvent playerJoinEvent) {
-            Player player = playerJoinEvent.getPlayer();
-
-            tntLaunch.put(player, false);
-        }
-
-        @EventHandler
         public void onPlayerAnimationEvent (PlayerAnimationEvent playerAnimationEvent) {
             Player player = playerAnimationEvent.getPlayer();
 
             if (playerAnimationEvent.getAnimationType() == PlayerAnimationType.ARM_SWING) {
-                if (true == tntLaunch.get(player)) {
+                String name = launch.get(player);
+                if (StringUtils.equals("s1", name)) {
+                    step1Action(player);
+                }
+                if (StringUtils.equals("a1", name)) {
                     answer1Action(player);
+                }
+                if (StringUtils.equals("s2", name)) {
+                    step2Action(player);
                 }
             }
         }
     }
+
+    private void step2Action(Player player) {
+        Location location = player.getEyeLocation();
+
+        Vector vTnt = location.getDirection().multiply(2);
+
+        TNTPrimed tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(vTnt);
+
+        location.setYaw(location.getYaw() + 180);
+        vTnt = location.getDirection().multiply(2);
+
+        tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(vTnt);
+    }
+
 
     private void step1Action(Player player) {
         Location location = player.getEyeLocation();
