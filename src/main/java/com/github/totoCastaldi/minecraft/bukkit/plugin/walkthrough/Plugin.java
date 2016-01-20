@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Cow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
@@ -70,16 +71,31 @@ public class Plugin extends JavaPlugin {
 
             if (playerAnimationEvent.getAnimationType() == PlayerAnimationType.ARM_SWING) {
                 if (true == tntLaunch.get(player)) {
-                    Location location = player.getEyeLocation();
-
-                    player.sendMessage(ChatColor.DARK_AQUA + "BOOM!");
-
-                    TNTPrimed tnt = player.getWorld().spawn(location, TNTPrimed.class);
-                    Vector v = location.getDirection().multiply(2);
-                    tnt.setVelocity(v);
+                    answer1Action(player);
                 }
             }
         }
+    }
+
+    private void step1Action(Player player) {
+        Location location = player.getEyeLocation();
+
+        player.sendMessage(ChatColor.DARK_AQUA + "BOOM!");
+
+        Vector v = location.getDirection().multiply(2);
+
+        TNTPrimed tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(v);
+    }
+
+    private void answer1Action(Player player) {
+        step1Action(player);
+        Location location = player.getEyeLocation();
+
+        Vector v = location.getDirection().multiply(2);
+
+        Cow cow = player.getWorld().spawn(location, Cow.class);
+        cow.setVelocity(v);
     }
 
     public void onEnable() {
