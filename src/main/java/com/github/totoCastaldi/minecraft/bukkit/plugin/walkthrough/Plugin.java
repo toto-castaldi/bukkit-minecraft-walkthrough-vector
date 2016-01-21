@@ -43,11 +43,13 @@ public class Plugin extends JavaPlugin {
 
             if ("1".equalsIgnoreCase(firstParameter)) step(me, "s1", StringUtils.equalsIgnoreCase("start", secondParameter));
             if ("2".equalsIgnoreCase(firstParameter)) step(me, "s2", StringUtils.equalsIgnoreCase("start", secondParameter));
+            if ("3".equalsIgnoreCase(firstParameter)) step(me, "s3", StringUtils.equalsIgnoreCase("start", secondParameter));
         }
 
         if (StringUtils.equalsIgnoreCase("answer", commandLabel)) {
 
             if ("1".equalsIgnoreCase(firstParameter)) step(me, "a1", StringUtils.equalsIgnoreCase("start", secondParameter));
+            if ("2".equalsIgnoreCase(firstParameter)) step(me, "a2", StringUtils.equalsIgnoreCase("start", secondParameter));
         }
 
         return true;
@@ -83,8 +85,51 @@ public class Plugin extends JavaPlugin {
                 if (StringUtils.equals("s2", name)) {
                     step2Action(player);
                 }
+                if (StringUtils.equals("a2", name)) {
+                    answer2Action(player);
+                }
+                if (StringUtils.equals("s3", name)) {
+                    step3Action(player);
+                }
             }
         }
+    }
+
+    private void step3Action(Player player) {
+        Location location = player.getEyeLocation();
+
+        location.setYaw(location.getYaw() - 90);
+
+        for (int i = 0; i < 18; i++) {
+            location.setYaw(location.getYaw() + 10);
+
+            Vector vTnt = location.getDirection().multiply(2);
+
+            TNTPrimed tnt = player.getWorld().spawn(location, TNTPrimed.class);
+            tnt.setVelocity(vTnt);
+        }
+
+    }
+
+    private void answer2Action(Player player) {
+        Location location = player.getEyeLocation();
+
+        Vector vTnt = location.getDirection().multiply(2);
+
+        TNTPrimed tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(vTnt);
+
+        location.setYaw(location.getYaw() - 30);
+        vTnt = location.getDirection().multiply(2);
+
+        tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(vTnt);
+
+        location.setYaw(location.getYaw() + 60);
+        vTnt = location.getDirection().multiply(2);
+
+        tnt = player.getWorld().spawn(location, TNTPrimed.class);
+        tnt.setVelocity(vTnt);
     }
 
     private void step2Action(Player player) {
